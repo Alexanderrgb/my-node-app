@@ -1,9 +1,28 @@
-const http = require('http');
-const server = http.createServer((req, res) => {
-res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-res.end('<h1>Привет, мир!</h1>');
-});
-const PORT = 3000;
-server.listen(PORT, () => {
-console.log(`Сервер запущен на http://localhost:${PORT}`);
-});
+
+
+const fullName = "Судник Александр Николаевич";
+
+const group = "477"; 
+
+
+const journalNumber = 21; 
+
+
+function calculatePi(iterations) {
+    let pi = 0;
+    let sign = 1;
+    for (let i = 0; i < iterations; i++) {
+        pi += sign / (2 * i + 1);
+        sign *= -1;
+    }
+    return pi * 4;
+}
+
+
+const iterations = 10000000;
+const pi = calculatePi(iterations);
+
+
+console.log(fullName);                       // 1-я строка: ФИО
+console.log(group);                          // 2-я строка: группа
+console.log(pi.toFixed(journalNumber));      // 3-я строка: число π
