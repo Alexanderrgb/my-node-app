@@ -64,6 +64,8 @@ class AppServer extends EventEmitter {
 }
 
 var app = new AppServer();
+var logger = require('./logger');
+logger.setupLogger(app);
 
 app.on('server:started', function(p) {
     console.log('server started on ' + p);
