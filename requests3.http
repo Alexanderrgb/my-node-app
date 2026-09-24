@@ -1,0 +1,34 @@
+@baseUrl = http://localhost:3002
+
+### Получить все книги
+GET {{baseUrl}}/api/books
+
+### Получить книгу по ID
+GET {{baseUrl}}/api/books/1
+
+### Получить несуществующую книгу (ошибка 404)
+GET {{baseUrl}}/api/books/999
+
+### Добавить книгу
+POST {{baseUrl}}/api/books
+Content-Type: application/json
+
+{
+  "title": "Мастер и Маргарита",
+  "author": "Булгаков",
+  "year": 1967
+}
+
+### Добавить книгу с невалидными данными (ошибка 400)
+POST {{baseUrl}}/api/books
+Content-Type: application/json
+
+{
+  "title": "Без автора"
+}
+
+### Тест синхронной ошибки
+GET {{baseUrl}}/error
+
+### Тест асинхронной ошибки
+GET {{baseUrl}}/async-error
