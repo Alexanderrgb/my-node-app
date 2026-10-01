@@ -1,0 +1,84 @@
+### ============================================
+### ЗАДАНИЕ 2: REST API для книг
+### Сервер запущен на http://localhost:3001
+### ============================================
+
+### 1. GET /api/books — получить ВСЕ книги
+GET http://localhost:3001/api/books HTTP/1.1
+
+### 2. GET /api/books/1 — получить книгу с ID=1
+GET http://localhost:3001/api/books/1 HTTP/1.1
+
+### 3. GET /api/books/2 — получить книгу с ID=2
+GET http://localhost:3001/api/books/2 HTTP/1.1
+
+### 4. GET /api/books/999 — тест ошибки 404 (книга не найдена)
+GET http://localhost:3001/api/books/999 HTTP/1.1
+
+### 5. GET /api/books/search?author=Толстой — поиск по автору
+GET http://localhost:3001/api/books/search?author=Толстой HTTP/1.1
+
+### 6. GET /api/books/search?author=Достоевский — поиск по автору
+GET http://localhost:3001/api/books/search?author=Достоевский HTTP/1.1
+
+### 7. POST /api/books — добавить новую книгу
+POST http://localhost:3001/api/books HTTP/1.1
+Content-Type: application/json
+
+{
+  "title": "Мастер и Маргарита",
+  "author": "Булгаков",
+  "year": 1967
+}
+
+### 8. POST /api/books — добавить ещё одну книгу
+POST http://localhost:3001/api/books HTTP/1.1
+Content-Type: application/json
+
+{
+  "title": "Отцы и дети",
+  "author": "Тургенев",
+  "year": 1862
+}
+
+### 9. POST /api/books — тест ошибки 400 (не все поля заполнены)
+POST http://localhost:3001/api/books HTTP/1.1
+Content-Type: application/json
+
+{
+  "title": "Неполная книга"
+}
+
+### 10. PUT /api/books/1 — обновить книгу с ID=1
+PUT http://localhost:3001/api/books/1 HTTP/1.1
+Content-Type: application/json
+
+{
+  "title": "Война и мир (новое издание)",
+  "year": 2024
+}
+
+### 11. PUT /api/books/2 — обновить только год у книги с ID=2
+PUT http://localhost:3001/api/books/2 HTTP/1.1
+Content-Type: application/json
+
+{
+  "year": 2020
+}
+
+### 12. PUT /api/books/999 — тест ошибки 404 (книга не найдена)
+PUT http://localhost:3001/api/books/999 HTTP/1.1
+Content-Type: application/json
+
+{
+  "title": "Несуществующая книга"
+}
+
+### 13. DELETE /api/books/3 — удалить книгу с ID=3
+DELETE http://localhost:3001/api/books/3 HTTP/1.1
+
+### 14. DELETE /api/books/999 — тест ошибки 404 (книга не найдена)
+DELETE http://localhost:3001/api/books/999 HTTP/1.1
+
+### 15. GET /api/books — проверить список после изменений
+GET http://localhost:3001/api/books HTTP/1.1
