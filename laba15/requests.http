@@ -1,0 +1,84 @@
+### ============================================
+### ЗАДАНИЕ 1: Главная страница (HTML)
+### ============================================
+
+### 1.1 Получить HTML-страницу
+GET http://localhost:3000/
+Accept: text/html
+
+
+### ============================================
+### ЗАДАНИЕ 2: CRUD для пользователей
+### ============================================
+
+### 2.1 Получить всех пользователей
+GET http://localhost:3000/api/users
+Accept: application/json
+
+### 2.2 Получить пользователя по ID (существующий)
+GET http://localhost:3000/api/users/1
+Accept: application/json
+
+### 2.3 Получить пользователя по ID (несуществующий — должен быть 404)
+GET http://localhost:3000/api/users/999
+Accept: application/json
+
+### 2.4 Создать нового пользователя
+POST http://localhost:3000/api/users
+Content-Type: application/json
+
+{
+  "name": "Сидоров Сидор",
+  "group": "ББМО-01-23"
+}
+
+### 2.5 Создать пользователя с невалидными данными (должен быть 400)
+POST http://localhost:3000/api/users
+Content-Type: application/json
+
+{
+  "name": ""
+}
+
+### 2.6 Обновить пользователя (PUT)
+PUT http://localhost:3000/api/users/1
+Content-Type: application/json
+
+{
+  "name": "Петров Петр",
+  "group": "ББМО-02-23"
+}
+
+### 2.7 Обновить несуществующего пользователя (должен быть 404)
+PUT http://localhost:3000/api/users/999
+Content-Type: application/json
+
+{
+  "name": "Никто"
+}
+
+### 2.8 Удалить пользователя
+DELETE http://localhost:3000/api/users/1
+Accept: application/json
+
+### 2.9 Удалить несуществующего пользователя (должен быть 404)
+DELETE http://localhost:3000/api/users/999
+Accept: application/json
+
+
+### ============================================
+### ЗАДАНИЕ 3: Middleware (логирование, ошибки, авторизация)
+### ============================================
+
+### 3.1 Вызвать маршрут с ошибкой (должен вернуть JSON с ошибкой 500)
+GET http://localhost:3000/error
+Accept: application/json
+
+### 3.2 Защищённый маршрут БЕЗ авторизации (должен быть 401)
+GET http://localhost:3000/protected
+Accept: application/json
+
+### 3.3 Защищённый маршрут С авторизацией (должен быть 200)
+GET http://localhost:3000/protected
+Authorization: Bearer my-secret-token
+Accept: application/json
