@@ -1,54 +1,55 @@
-const http = require('http');
-const url = require('url');
+const { Writable } = require('stream');
 
-const PORT = 3000;
 const GROUP = '477';
+const STUDENT = 'Судник Александр';
 
-const server = http.createServer((req, res) => {
-    const parsedUrl = url.parse(req.url, true);
-    const path = parsedUrl.pathname;
-    const method = req.method;
+// Данные для записи
+const dataToWrite = [
+    `Группа: ${GROUP}`,
+    `Студент: ${STUDENT}`,
+    `Лабораторная работа: №21`,
+    `Тема: Потоки в Node.js`
+];
 
-    // Установка заголовков
-    res.setHeader('X-Powered-By', 'Node.js');
-    res.setHeader('X-Group', GROUP);
-    res.setHeader('Cache-Control', 'no-cache');
+let totalChunks = 0;
 
-    if (path === '/headers' && method === 'GET') {
-        // Чтение входящих заголовков
-        res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
-        res.end(JSON.stringify({
-            headers: req.headers, 
-            method: method,
-            url: path,
-            httpVersion: req.httpVersion
-        }, null, 2));
-
-    } else if (path === '/headers/set' && method === 'GET') {
-        // Установка исходящих заголовков
-        res.setHeader('Content-Type', 'text/html; charset=utf-8');
-        res.writeHead(200);
-        res.end(`<h1>Заголовки установлены!</h1>
-                 <p>X-Powered-By: ${res.getHeader('X-Powered-By')}</p>
-                 <p>X-Group: ${res.getHeader('X-Group')}</p>
-                 <p>Cache-Control: ${res.getHeader('Cache-Control')}</p>
-                 <p>Content-Type: ${res.getHeader('Content-Type')}</p>`);
-
-    } else if (path === '/headers/check' && method === 'GET') {
-        // Проверка наличия заголовков
-        res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
-        res.end(JSON.stringify({
-            hasContentType: res.hasHeader('Content-Type'),
-            hasXGroup: res.hasHeader('X-Group'),
-            hasUnknown: res.hasHeader('X-Unknown')
-        }, null, 2));
-
-    } else {
-        res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
-        res.end('404 Not Found');
+// Создаем Writable-поток с маленьким буфером (16 байт)
+const myWritable = new Writable({
+    highWaterMark: 16,
+    write(chunk, encoding, callback) {
+        totalChunks++;
+        // Имитация задержки обработки
+        setTimeout(() => {
+            console.log(`[WRITE] ${chunk.toString().trim()}`);
+            callback(); // Сообщаем, что чанк обработан
+        }, 100);
     }
 });
 
-server.listen(PORT, () => {
-    console.log(`Сервер (задание 2) запущен на порту ${PORT}`);
+console.log('=== Демонстрация Writable-потока ===');
+
+myWritable.on('drain', () => {
+    console.log('[DRAIN] Буфер освобожден, продолжаем запись');
 });
+
+myWritable.on('finish', () => {
+    console.log('[FINISH] Все данные записаны');
+    console.log(`Всего записано: ${totalChunks} чанка`);
+});
+
+myWritable.on('error', (err) => {
+    console.error('[ERROR]', err.message);
+});
+
+// Записываем данные
+for (const text of dataToWrite) {
+    const isBuffered = myWritable.write(text + '\n');
+    if (!isBuffered) {
+        console.log('write() вернул: false (буфер переполнен!)');
+    } else {
+        console.log('write() вернул: true');
+    }
+}
+
+// Завершаем поток
+myWritable.end();
